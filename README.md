@@ -46,3 +46,7 @@ Claudeくんと一緒に作っている、窓の板ポリ1枚の奥に部屋が�
 
 ## ライセンス
 MIT License
+
+## 家具付き住宅サンプル
+
+`Samples/Residential` に昼間・点灯のリビング画像とマテリアルを追加しています。窓寸法、同じ部屋に属する複数窓のUV、編集可能なBlender内装ソース、Unityでの確認結果は [住宅内装サンプル](Docs~/apartment/README.md) を参照してください。
