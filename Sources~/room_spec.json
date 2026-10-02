@@ -1,0 +1,12 @@
+{
+  "width": 4.47,
+  "height": 2.1,
+  "depth": 3.2,
+  "cameraDistance": 3.2,
+  "backWallScale": 0.5,
+  "resolution": [
+    1536,
+    722
+  ],
+  "method": "Blender Cycles scene rendering"
+}

@@ -30,7 +30,8 @@ Shader "sizimityper/FakeInterior"
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "Queue" = "Geometry" }
+        // オブジェクト空間の部屋寸法を使うため、頂点を世界座標へ焼く動的バッチを禁止する。
+        Tags { "RenderType" = "Opaque" "Queue" = "Geometry" "DisableBatching" = "True" }
         LOD 100
 
         Pass
@@ -98,7 +99,8 @@ Shader "sizimityper/FakeInterior"
                 float3 viewOS = ObjSpaceViewDir(v.vertex);
                 float3 n = normalize(v.normal);
                 float3 t = normalize(v.tangent.xyz);
-                float3 b = cross(n, t) * v.tangent.w * unity_WorldTransformParams.w;
+                // 視線も基底もオブジェクト空間。負スケールの符号を二重適用しない。
+                float3 b = cross(n, t) * v.tangent.w;
                 o.viewTS = float3(dot(viewOS, t), dot(viewOS, b), dot(viewOS, n));
 
                 UNITY_TRANSFER_FOG(o, o.pos);
@@ -174,7 +176,8 @@ Shader "sizimityper/FakeInterior"
                     // 平面より手前で壁に当たっている（=平面が壁の外）なら見えない
                     float inside = (tm <= tHit) && all(abs(mxy) <= halfSize.xy) ? 1.0 : 0.0;
                     float2 midUVst = midUV * _MiddleTex_ST.xy + _MiddleTex_ST.zw;
-                    half4 mid = tex2Dgrad(_MiddleTex, midUVst, ddx(i.uv) * _MiddleTex_ST.xy, ddy(i.uv) * _MiddleTex_ST.xy) * _MiddleColor;
+                    // カーテン平面へ投影した実際のUVからミップの微分を求める。
+                    half4 mid = tex2Dgrad(_MiddleTex, midUVst, ddx(midUVst), ddy(midUVst)) * _MiddleColor;
                     col = lerp(col, mid.rgb, mid.a * inside);
                 }
                 #endif
